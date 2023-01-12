@@ -1,0 +1,25 @@
+:root {
+  --dark: #222546;
+  --white: #F7F8FA;
+  --green: #008C8F;
+  --blue: #376AA9;
+  --purple: #735AB6;
+}
+
+body {
+  background-color: var(--dark);
+  color: var(--white);
+}
+
+.header {
+  background-color: var(--green);
+background: linear-gradient(270deg, rgba(0,87,89,1) 0%, rgba(0,140,143,1) 50%, rgba(0,175,179,1) 100%);
+  color: var(--white);
+  text-align: center;
+  font-size: 30px;;
+  padding: 15px 0px 15px 0px;
+}
+
+#currentDate {
+  font-size: 20px;
+}
