@@ -12,14 +12,58 @@ body {
 }
 
 .header {
-  background-color: var(--green);
-background: linear-gradient(270deg, rgba(0,87,89,1) 0%, rgba(0,140,143,1) 50%, rgba(0,175,179,1) 100%);
   color: var(--white);
   text-align: center;
-  font-size: 30px;;
+  font-size: 50px;;
   padding: 15px 0px 15px 0px;
+  margin: 0px 15px 0px 15px;
 }
 
 #currentDate {
   font-size: 20px;
+  padding: 20px 0px 10px 0px;
+}
+
+/* .row {
+  outline: solid 1px red;
+} */
+
+.column {
+  text-align: left;
+} 
+
+.selector {
+  margin-left: 20px;
+  background: #353A6E;
+}
+
+.accordion-item {
+  padding: 20px 20px 30px 5px;
+}
+
+.accordion-button {
+  padding: 0px 15px 0px 15px;
+  border-radius: 10px;
+  margin: 0px 0px 0px 10px;
+  background-color: var(--green);
+  color: var(--white);
+  font-size: 30px;
+  width: 300px;
+  text-align: left;
+}
+
+input {
+  margin: 5px 5px 5px 10px;
+}
+
+#storedLocation {
+  margin: 15px 5px 5px 10px;
+}
+
+.renderArea {
+  background-color: var(--blue);
+}
+
+#savedLocation {
+  width: 90%;
 }
