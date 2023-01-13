@@ -1,28 +1,55 @@
 
 $(function () {
-  
+
   let locations = JSON.parse(localStorage.getItem('locations'));
 
   if (!locations) { // checks to see if there is anything in local storage first
     locations = []; // creates an object for local strorage if none exists
+  } else {
+    createBtn();
   };
-
+  
   const dateEl = $("#currentDate");
   const today = moment().format("MMMM Do, YYYY");
   dateEl[0].innerHTML = today;
 
   const locationEl = $("#locationSearch");
-  const submitBTN = $("#locationSubmit");
-  
-  
-  submitBTN.click(function (event) {
-    //create array for local storage
-    locations.push(locationEl.val());
-    localStorage.setItem('locations', JSON.stringify(locations));
-    
-    //make sure this pushes to the array
-  });
+  const submitBtn = $("#locationSubmit");
 
+
+  function removeBtn() {
+    var grabBtn = $("#storedLocation");
+        grabBtn.children().remove();
+      }
+
+  function createBtn() {
+    removeBtn();
+    for (var city of locations) {
+      //need to only add new buttons, not return the full array on each click
+      buttonEl = $('<input/>').attr({
+        type: "button",
+        id: "savedLocation",
+        value: city,
+      });
+      $("#storedLocation").append(buttonEl);
+    }
+  };
+
+  submitBtn.click(function (event) {
+    if (locationEl.val() == "") {
+      return;
+    } else {
+      // removeBtn(); // won't allow for more city inputs
+      locations.push(locationEl.val());
+      localStorage.setItem('locations', JSON.stringify(locations));
+      // don't want this tied to button click only, add to document and allow for a call here?
+      //set this to only serve the newest city on click 
+      createBtn();
+      //this is not working
+      locationEl.val("");
+    }
+  });
+  
 
   // saveBtnEl.click(function (event) {
   //   const inputText = (event.currentTarget.parentElement.children[1].value.trim()); // user input text
@@ -42,9 +69,8 @@ $(function () {
 
   // get icons here http://openweathermap.org/img/wn/$%7Bicon%7D@2x.png
   // or here https://openweathermap.org/weather-conditions
+
+  //will have to do 2 api calls (one for lat/long from city, next for 5 day forecast)
+
+  // use postman.com to help with creating the api url + test
 });
-
-//will have to do 2 api calls (one for lat/long from city, next for 5 day forecast)
-
-// use postman.com to help with creating the api url + test
-

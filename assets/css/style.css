@@ -63,3 +63,7 @@ input {
 .renderArea {
   background-color: var(--blue);
 }
+
+#savedLocation {
+  width: 90%;
+}
