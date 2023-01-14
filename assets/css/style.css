@@ -64,6 +64,6 @@ input {
   background-color: var(--blue);
 }
 
-#savedLocation {
+.locationBtn {
   width: 90%;
 }
