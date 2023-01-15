@@ -2,7 +2,8 @@
   --dark: #222546;
   --white: #F7F8FA;
   --green: #008C8F;
-  --blue: #376AA9;
+  --blue: #84A9D7;
+  --dblue: #376AA9;
   --purple: #735AB6;
 }
 
@@ -30,8 +31,6 @@ body {
 
 #col2 {
   padding-top: 15px;
-}
-#col2 {
   padding-bottom: 30px;
 }
 
@@ -49,7 +48,7 @@ body {
 
 .accordion-button {
   padding: 0px 15px 0px 15px;
-  border-radius: 10px;
+  border-radius: 5px;
   margin: 0px 0px 0px 10px;
   background-color: var(--green);
   color: var(--white);
@@ -72,6 +71,7 @@ input {
 
 .card {
   margin: 10px 10px 30px 10px;
+  border-radius: 5px;
 }
 
 .card-body {
@@ -85,7 +85,7 @@ input {
 
 .main-card-text {
   white-space: pre-wrap;
-  color: black;
+  color: var(--dark);
 }
 
 .card-subtext {
@@ -97,14 +97,27 @@ input {
   display: flex;
 }
 
-.card-location {
-  color: var(--green);
+#row1 {
+  color: black;
 }
-
-/* #mp2El {
-  color: gray;
-} */
 
 #p1El {
   font-weight: bold;
+}
+
+.mcard-body {
+  background-color: var(--blue);
+  outline: solid 1px var(--dblue);
+}
+
+#col1 {
+  margin-left: 10px;
+}
+
+#locationSubmit {
+  border-radius: 10px;
+}
+
+.locationBtn {
+  border-radius: 10px;
 }
