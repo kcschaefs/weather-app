@@ -83,3 +83,7 @@ input {
 .card-text {
   white-space: pre-wrap;
 }
+
+#forecastWeather {
+  display: flex;
+}

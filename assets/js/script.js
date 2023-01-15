@@ -194,7 +194,7 @@ $(function () {
     cardP2El = $('<p>').attr({
       class: "card-text",
       id: "p2El",
-      style: "line-height: 10px; color: var(--dark)",
+      style: "line-height: 10px; color: lightgray",
     })
     cardP3El = $('<p>').attr({
       class: "card-text",
@@ -210,7 +210,7 @@ $(function () {
     cardBodyEl.append(cardP2El);
     cardBodyEl.append(cardP3El);
 
-    cardH5El.text(obj.date.format("MMMM Do, YYYY"));
+    cardH5El.text(obj.date.format("MMMM Do"));
     cardP1El.text("Temp: "+obj.main.tempf+"°F");
     cardP2El.text("Feels Like: "+obj.main.tempfeelsf+"°F");
     cardP3El.text("Wind: "+obj.wind.speed+" MPH");
