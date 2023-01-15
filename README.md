@@ -4,6 +4,7 @@
 
 ![Screenshot of the final page](./assets/images/final-screenshot-weather-app.png)
 
+
 ## User Story
 AS A traveler
 I WANT to see the weather outlook for multiple cities
