@@ -13,9 +13,11 @@ $(function () {
     createBtn();
   };
 
-  const dateEl = $("#currentDate"); // shows current date on page
-  const today = moment().format("MMMM Do, YYYY");
-  dateEl[0].innerHTML = today;
+  function today() {
+    const dateEl = $("#currentWeather"); // shows current date on page
+    const today = moment().format("MMMM Do, YYYY");
+    dateEl[0].innerHTML = today;
+  };
 
   const locationEl = $("#locationSearch");
   const submitBtn = $("#locationSubmit");
@@ -48,6 +50,7 @@ $(function () {
       localStorage.setItem('locations', JSON.stringify(locations));
       createBtn();
       locationEl.val("");
+      today(); //change to pull from the data instead
     }
   });
 
@@ -88,14 +91,21 @@ $(function () {
     data.list.forEach(obj => {
       const dateObj = new moment.unix(obj.dt)
       // console.log(dateObj.date());
+      // .format("MMMM Do, YYYY")
+      obj.date = dateObj
       const currDay = dateObj.date();
 
       if (currDay !== currDTValue && fiveDaysOfWeather.length < 6 && !fiveDaysOfWeather.find(day => day.dt === obj.dt)) {
         currDTValue = currDay
         fiveDaysOfWeather.push(obj)
         tempChange(obj);  // added this in so I can loop through the temperature conversion without having to create a new loop
+        tempFeelChange(obj);
       }
     })
+    createCurrentCard(fiveDaysOfWeather[0]);
+    for (i=1;i<6;i++) {
+    createFutureCard(fiveDaysOfWeather[i]);
+    }
   };
   // end of provided code
 
@@ -107,17 +117,106 @@ $(function () {
     obj.main.tempf = Math.round(farenh); // rounds to the nearest whole number because I don't care about decimal places in a temperature, I want the whole number
   };
 
+  function tempFeelChange(obj) { // this converts the temp from the provided kelvin to faranheit
+    let kelvin = obj.main.feels_like; //grabs the temp out of the populated array
+    let farenh = (kelvin - 273.15) * 9 / 5 + 32; //converts to farenheit
+    obj.main.tempfeelsf = Math.round(farenh); // rounds to the nearest whole number because I don't care about decimal places in a temperature, I want the whole number
+  };
+
   // weather info serving -----------------------------------------------------------
 
-  // console.log("t");
+  function createCurrentCard(obj) {
+    mainCardEl = $('<div>').attr({
+      class: "card",
+      style: "width: 100%; outline: solid 1px black; background-color: white;",
+    });
+    mainCardBodyEl = $('<div>').attr({
+      class: "card-body",
+    })
+    mainCardH5El = $('<h5>').attr({
+      class: "card-title",
+    })
+    mainCardImgEl = $('<img>').attr({
+      class: "card-subtitle mb-2",
+      src: `http://openweathermap.org/img/wn/${obj.weather[0].icon}.png`,
+    })
+    mainCardP1El = $('<p>').attr({
+      class: "card-text",
+      id: "p1El",
+      style: "line-height: 10px; margin-top: 15px",
+    })
+    mainCardP2El = $('<p>').attr({
+      class: "card-text",
+      id: "p2El",
+      style: "line-height: 10px",
+    })
+    mainCardP3El = $('<p>').attr({
+      class: "card-text",
+      id: "p3El",
+      style: "line-height: 10px",
+    })
 
-  // will need to convert temp from kelvin to faranheit
+    $("#currentWeather").append(mainCardEl);
+    mainCardEl.append(mainCardBodyEl);
+    mainCardBodyEl.append(mainCardH5El);
+    mainCardBodyEl.append(mainCardImgEl);
+    mainCardBodyEl.append(mainCardP1El);
+    mainCardBodyEl.append(mainCardP2El);
+    mainCardBodyEl.append(mainCardP3El);
 
+    mainCardH5El.text(obj.date.format("MMMM Do, YYYY"));
+    mainCardP1El.text("Temp: "+obj.main.tempf+"°F");
+    mainCardP2El.text("Feels Like: "+obj.main.tempfeelsf+"°F");
+    mainCardP3El.text("Wind: "+obj.wind.speed+" MPH");
+  }
+
+  function createFutureCard(obj) {
+    cardEl = $('<div>').attr({
+      class: "card",
+      style: "width: 18rem; background-color: var(--green)",
+    });
+    cardBodyEl = $('<div>').attr({
+      class: "card-body",
+    })
+    cardH5El = $('<h5>').attr({
+      class: "card-title",
+      style: "color: var(--white)",
+    })
+    cardImgEl = $('<img>').attr({
+      class: "card-subtitle mb-2",
+      src: `http://openweathermap.org/img/wn/${obj.weather[0].icon}.png`,
+    })
+    cardP1El = $('<p>').attr({
+      class: "card-text",
+      id: "p1El",
+      style: "line-height: 10px; margin-top: 15px; color: var(--white)",
+    })
+    cardP2El = $('<p>').attr({
+      class: "card-text",
+      id: "p2El",
+      style: "line-height: 10px; color: var(--dark)",
+    })
+    cardP3El = $('<p>').attr({
+      class: "card-text",
+      id: "p3El",
+      style: "line-height: 10px; color: var(--white)",
+    })
+
+    $("#forecastWeather").append(cardEl);
+    cardEl.append(cardBodyEl);
+    cardBodyEl.append(cardH5El);
+    cardBodyEl.append(cardImgEl);
+    cardBodyEl.append(cardP1El);
+    cardBodyEl.append(cardP2El);
+    cardBodyEl.append(cardP3El);
+
+    cardH5El.text(obj.date.format("MMMM Do, YYYY"));
+    cardP1El.text("Temp: "+obj.main.tempf+"°F");
+    cardP2El.text("Feels Like: "+obj.main.tempfeelsf+"°F");
+    cardP3El.text("Wind: "+obj.wind.speed+" MPH");
+  };
 
   // get icons here http://openweathermap.org/img/wn/$%7Bicon%7D@2x.png
   // or here https://openweathermap.org/weather-conditions
 
-  //will have to do 2 api calls (one for lat/long from city, next for 5 day forecast)
-
-  // use postman.com to help with creating the api url + test
 });

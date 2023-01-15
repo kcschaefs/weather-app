@@ -34,7 +34,7 @@ body {
 
 .selector {
   margin-left: 20px;
-  background: #353A6E;
+  /* background: #353A6E; */
 }
 
 .accordion-item {
@@ -60,10 +60,26 @@ input {
   margin: 15px 5px 5px 10px;
 }
 
-.renderArea {
+/* .renderArea {
   background-color: var(--blue);
-}
+} */
 
 .locationBtn {
   width: 90%;
+}
+
+.card {
+  margin: 10px 10px 30px 10px;
+}
+
+.card-body {
+  color: black;
+}
+
+#currentWeather {
+  margin: 10px 10px 30px 10px;
+}
+
+.card-text {
+  white-space: pre-wrap;
 }
