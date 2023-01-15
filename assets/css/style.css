@@ -121,3 +121,11 @@ input {
 .locationBtn {
   border-radius: 10px;
 }
+
+.card-location {
+  margin-top: 10px;
+}
+
+.mcard-title {
+  margin-top: 10px;
+}

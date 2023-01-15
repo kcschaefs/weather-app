@@ -1,8 +1,8 @@
 # Weather Forecast Dashboard
-UPDATE!!!
-![Click here to view final version of webpage](https://kcschaefs.github.io/workday-scheduler/)
 
-![Screenshot of the final page](./assets/images/Screenshot%20at%20Jan%2011%2017-24-58.png)
+![Click here to view final version of webpage](https://kcschaefs.github.io/weather-app/)
+
+![Screenshot of the final page](./assets/images/final-screenshot-weather-app.png)
 
 ## User Story
 AS A traveler
