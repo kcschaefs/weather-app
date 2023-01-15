@@ -80,8 +80,31 @@ input {
 
 .card-text {
   white-space: pre-wrap;
+  color: var(--white);
+}
+
+.main-card-text {
+  white-space: pre-wrap;
+  color: black;
+}
+
+.card-subtext {
+  white-space: pre-wrap;
+  color: lightgray;
 }
 
 #forecastWeather {
   display: flex;
+}
+
+.card-location {
+  color: var(--green);
+}
+
+/* #mp2El {
+  color: gray;
+} */
+
+#p1El {
+  font-weight: bold;
 }
