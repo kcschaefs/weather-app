@@ -1,4 +1,25 @@
-# 06 Server-Side APIs: Weather Dashboard
+# Weather Forecast Dashboard
+UPDATE!!!
+![Click here to view final version of webpage](https://kcschaefs.github.io/workday-scheduler/)
+
+![Screenshot of the final page](./assets/images/Screenshot%20at%20Jan%2011%2017-24-58.png)
+
+## Tasks
+-   create the layout using html, css, and bootstrap
+-   create user input for the city which will then save to local storage
+-   create a button for all cities stored in local storage that can also be used to call the weather data for that city
+-   use API calls to pull the location coordinates for the input city and then uses those coordinates to pull the weather data for that location
+-   serve the weather data on the page with each day in a separate card
+-   test the app to ensure it works and see what happens when a user inputs info that is not an identified city
+
+## Learnings
+-   how to call web-based APIs
+-   how to pass information into my API call to make it dynamic (entering different cities gets different weather data)
+-   how to use code to complete math functions (converting kelvin to farenheit)
+-   navigating complex arrays and objects to get the specific information I need
+
+## Future Improvements
+-   change the input to require both city and state to ensure the user is getting their desired location
 
 ## Your Task
 
@@ -11,16 +32,12 @@ Use the [5 Day Weather Forecast](https://openweathermap.org/forecast5) to retrie
 You will use `localStorage` to store any persistent data. For more information on how to work with the OpenWeather API, refer to the [Full-Stack Blog on how to use API keys](https://coding-boot-camp.github.io/full-stack/apis/how-to-use-api-keys).
 
 ## User Story
-
-```
 AS A traveler
 I WANT to see the weather outlook for multiple cities
 SO THAT I can plan a trip accordingly
-```
 
 ## Acceptance Criteria
 
-```
 GIVEN a weather dashboard with form inputs
 WHEN I search for a city
 THEN I am presented with current and future conditions for that city and that city is added to the search history
@@ -30,7 +47,7 @@ WHEN I view future weather conditions for that city
 THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
 WHEN I click on a city in the search history
 THEN I am again presented with current and future conditions for that city
-```
+
 
 ## Mock-Up
 
