@@ -1,6 +1,6 @@
 # Weather Forecast Dashboard
 
-![Click here to view final version of webpage](https://kcschaefs.github.io/weather-app/)
+[Click here to view final version of webpage](https://kcschaefs.github.io/weather-app/)
 
 ![Screenshot of the final page](./assets/images/final-screenshot-weather-app.png)
 
