@@ -54,7 +54,7 @@ $(function () {
   // api calls --------------------------------------------------------
 
   function getApiLocation(location) { // this gets the coordinates for the user input city
-    var requestUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=66b175c500dd9fc7665e0ac4fc3cff12`;
+    var requestUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=66b175c500dd9fc7665e0ac4fc3cff12`;
 
     fetch(requestUrl)
       .then(function (response) {
@@ -66,7 +66,7 @@ $(function () {
   };
 
   function getApiWeather(lat, lon) { // this gets the forecast for the coordinates pulled from the first api
-    var requestUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=66b175c500dd9fc7665e0ac4fc3cff12`;
+    var requestUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=66b175c500dd9fc7665e0ac4fc3cff12`;
 
     fetch(requestUrl)
       .then(function (response) {
@@ -136,7 +136,7 @@ $(function () {
     })
     mainCardImgEl = $('<img>').attr({
       class: "card-subtitle mb-2",
-      src: `http://openweathermap.org/img/wn/${obj.weather[0].icon}@2x.png`,
+      src: `https://openweathermap.org/img/wn/${obj.weather[0].icon}@2x.png`,
     })
     mainCardRowEl = $('<div>').attr({
       class: "row",
