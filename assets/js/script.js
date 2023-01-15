@@ -13,15 +13,8 @@ $(function () {
     createBtn();
   };
 
-  function today() {
-    const dateEl = $("#currentWeather"); // shows current date on page
-    const today = moment().format("MMMM Do, YYYY");
-    dateEl[0].innerHTML = today;
-  };
-
   const locationEl = $("#locationSearch");
   const submitBtn = $("#locationSubmit");
-
 
   function removeBtn() {
     var grabBtn = $("#storedLocation");
@@ -38,6 +31,9 @@ $(function () {
         value: city,
       });
       $("#storedLocation").append(buttonEl);
+      buttonEl.click(function (event) {
+        getApiLocation(event.currentTarget.value);
+      })
     }
   };
 
@@ -46,18 +42,18 @@ $(function () {
     if (locationEl.val() == "") {
       return;
     } else {
+      getApiLocation(locationEl.val());
       locations.push(locationEl.val());
       localStorage.setItem('locations', JSON.stringify(locations));
       createBtn();
       locationEl.val("");
-      today(); //change to pull from the data instead
     }
   });
 
   // api calls --------------------------------------------------------
 
-  function getApiLocation() { // this gets the coordinates for the user input city
-    var requestUrl = "http://api.openweathermap.org/geo/1.0/direct?q=Minneapolis&limit=1&appid=66b175c500dd9fc7665e0ac4fc3cff12";
+  function getApiLocation(location) { // this gets the coordinates for the user input city
+    var requestUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=66b175c500dd9fc7665e0ac4fc3cff12`;
 
     fetch(requestUrl)
       .then(function (response) {
@@ -66,13 +62,12 @@ $(function () {
       .then(function (data) {
         // console.log(data[0].lat);
         // console.log(data[0].lon);
+        getApiWeather(data[0].lat, data[0].lon);
       })
   };
 
-  getApiLocation();
-
-  function getApiWeather() { // this gets the forecast for the coordinates pulled from the first api
-    var requestUrl = "http://api.openweathermap.org/data/2.5/forecast?lat=44.9772995&lon=-93.2654692&appid=66b175c500dd9fc7665e0ac4fc3cff12";
+  function getApiWeather(lat, lon) { // this gets the forecast for the coordinates pulled from the first api
+    var requestUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=66b175c500dd9fc7665e0ac4fc3cff12`;
 
     fetch(requestUrl)
       .then(function (response) {
@@ -85,13 +80,13 @@ $(function () {
 
   //this code was provided by professor to pull out the specific time sets from the provided data
   let currDTValue = "";
-  const fiveDaysOfWeather = []
+  let fiveDaysOfWeather = []
 
   function parseWeatherData(data) {
+    // console.log(data.city.name);
+    fiveDaysOfWeather=[];
     data.list.forEach(obj => {
       const dateObj = new moment.unix(obj.dt)
-      // console.log(dateObj.date());
-      // .format("MMMM Do, YYYY")
       obj.date = dateObj
       const currDay = dateObj.date();
 
@@ -99,80 +94,161 @@ $(function () {
         currDTValue = currDay
         fiveDaysOfWeather.push(obj)
         tempChange(obj);  // added this in so I can loop through the temperature conversion without having to create a new loop
-        tempFeelChange(obj);
       }
     })
-    createCurrentCard(fiveDaysOfWeather[0]);
+    clearPreviousCards();
+    createCurrentCard(fiveDaysOfWeather[0], data.city.name);
     for (i=1;i<6;i++) {
     createFutureCard(fiveDaysOfWeather[i]);
     }
   };
   // end of provided code
 
-  getApiWeather();
 
-  function tempChange(obj) { // this converts the temp from the provided kelvin to faranheit
-    let kelvin = obj.main.temp; //grabs the temp out of the populated array
+  function convertTemp(kelvin) { // this converts the temp from the provided kelvin to faranheit 
     let farenh = (kelvin - 273.15) * 9 / 5 + 32; //converts to farenheit
-    obj.main.tempf = Math.round(farenh); // rounds to the nearest whole number because I don't care about decimal places in a temperature, I want the whole number
+    return Math.round(farenh); // rounds to the nearest whole number because I don't care about decimal places in a temperature, I want the whole number
   };
 
-  function tempFeelChange(obj) { // this converts the temp from the provided kelvin to faranheit
-    let kelvin = obj.main.feels_like; //grabs the temp out of the populated array
-    let farenh = (kelvin - 273.15) * 9 / 5 + 32; //converts to farenheit
-    obj.main.tempfeelsf = Math.round(farenh); // rounds to the nearest whole number because I don't care about decimal places in a temperature, I want the whole number
+  function tempChange(obj) { // adds new temp entries for serving faranheit into the card
+    obj.main.tempfeelsf = convertTemp(obj.main.feels_like);
+    obj.main.tempf = convertTemp(obj.main.temp);
+    obj.main.tempf_max = convertTemp(obj.main.temp_max);
+    obj.main.tempf_min = convertTemp(obj.main.temp_min);
   };
-
+  
   // weather info serving -----------------------------------------------------------
 
-  function createCurrentCard(obj) {
+  function createCurrentCard(obj, cityName) {
     mainCardEl = $('<div>').attr({
       class: "card",
+      id: "mainCardEl",
       style: "width: 100%; outline: solid 1px black; background-color: white;",
     });
     mainCardBodyEl = $('<div>').attr({
       class: "card-body",
     })
-    mainCardH5El = $('<h5>').attr({
-      class: "card-title",
+    mainCardH5El = $('<h4>').attr({
+      class: "mcard-title",
+    })
+    mainCardH6El = $('<h5>').attr({
+      class: "mcard-subtitle",
+    })
+    mainCardLocEl = $('<h4>').attr({
+      class: "card-location",
     })
     mainCardImgEl = $('<img>').attr({
       class: "card-subtitle mb-2",
-      src: `http://openweathermap.org/img/wn/${obj.weather[0].icon}.png`,
+      src: `http://openweathermap.org/img/wn/${obj.weather[0].icon}@2x.png`,
+    })
+    mainCardRowEl = $('<div>').attr({
+      class: "row",
+      id: "row1",
+    })
+    mainCardTextEl = $('<div>').attr({
+      class: "row",
+      id: "row2",
+    })
+    mainCardColAEl = $('<div>').attr({
+      class: "col-4",
+    })
+    mainCardColBEl = $('<div>').attr({
+      class: "col-4",
+    })
+    mainCardColCEl = $('<div>').attr({
+      class: "col-4",
+    })
+    mainCardCol1El = $('<div>').attr({
+      class: "col-4",
+      id: "col1",
     })
     mainCardP1El = $('<p>').attr({
-      class: "card-text",
+      class: "main-card-text",
       id: "p1El",
       style: "line-height: 10px; margin-top: 15px",
     })
     mainCardP2El = $('<p>').attr({
-      class: "card-text",
-      id: "p2El",
+      class: "main-card-text",
+      id: "mp2El",
       style: "line-height: 10px",
     })
+    mainCardCo12El = $('<div>').attr({
+      class: "col-4",
+      id: "col2",
+    })
+    mainCardCo13El = $('<div>').attr({
+      class: "col-4",
+      id: "col3",
+    })
     mainCardP3El = $('<p>').attr({
-      class: "card-text",
+      class: "main-card-text",
       id: "p3El",
+      style: "line-height: 10px",
+    })
+    mainCardP4El = $('<p>').attr({
+      class: "main-card-text",
+      id: "p4El",
+      style: "line-height: 10px",
+    })
+    mainCardP5El = $('<p>').attr({
+      class: "main-card-text",
+      id: "p5El",
+      style: "line-height: 10px",
+    })
+    mainCardP6El = $('<p>').attr({
+      class: "main-card-text",
+      id: "p6El",
+      style: "line-height: 10px",
+    })
+    mainCardP7El = $('<p>').attr({
+      class: "main-card-text",
+      id: "p6El",
       style: "line-height: 10px",
     })
 
     $("#currentWeather").append(mainCardEl);
     mainCardEl.append(mainCardBodyEl);
-    mainCardBodyEl.append(mainCardH5El);
-    mainCardBodyEl.append(mainCardImgEl);
-    mainCardBodyEl.append(mainCardP1El);
-    mainCardBodyEl.append(mainCardP2El);
-    mainCardBodyEl.append(mainCardP3El);
+    mainCardBodyEl.append(mainCardRowEl);
+    mainCardBodyEl.append(mainCardTextEl);
 
-    mainCardH5El.text(obj.date.format("MMMM Do, YYYY"));
+    mainCardRowEl.append(mainCardColAEl);
+    mainCardColAEl.append(mainCardH5El);
+    mainCardColAEl.append(mainCardH6El);
+
+    mainCardRowEl.append(mainCardColBEl);
+    mainCardColBEl.append(mainCardImgEl);
+
+    mainCardRowEl.append(mainCardColCEl);
+    mainCardColCEl.append(mainCardLocEl);
+
+    mainCardTextEl.append(mainCardCol1El);
+    mainCardCol1El.append(mainCardP1El);
+    mainCardCol1El.append(mainCardP2El);
+
+    mainCardTextEl.append( mainCardCo12El);
+    mainCardCo12El.append(mainCardP3El);
+    mainCardCo12El.append(mainCardP4El);
+
+    mainCardTextEl.append(mainCardCo13El);
+    mainCardCo13El.append(mainCardP5El);
+    mainCardCo13El.append(mainCardP6El);
+    mainCardCo13El.append(mainCardP7El);
+
+    mainCardH5El.text(obj.date.format("dddd"));
+    mainCardH6El.text(obj.date.format("MMMM Do, YYYY"));
     mainCardP1El.text("Temp: "+obj.main.tempf+"°F");
     mainCardP2El.text("Feels Like: "+obj.main.tempfeelsf+"°F");
-    mainCardP3El.text("Wind: "+obj.wind.speed+" MPH");
+    mainCardP3El.text("Max: "+obj.main.tempf_max+"°F");
+    mainCardP4El.text("Min: "+obj.main.tempf_min+"°F");
+    mainCardP5El.text("Humidity: "+obj.main.humidity+" %");
+    mainCardP6El.text("Wind: "+obj.wind.speed+" MPH");
+    mainCardP7El.text("Gust: "+obj.wind.gust+" MPH");
+    mainCardLocEl.text(cityName);
   }
 
   function createFutureCard(obj) {
     cardEl = $('<div>').attr({
-      class: "card",
+      class: "card futureCardEl",
       style: "width: 18rem; background-color: var(--green)",
     });
     cardBodyEl = $('<div>').attr({
@@ -189,17 +265,22 @@ $(function () {
     cardP1El = $('<p>').attr({
       class: "card-text",
       id: "p1El",
-      style: "line-height: 10px; margin-top: 15px; color: var(--white)",
+      style: "line-height: 10px; margin-top: 15px",
     })
     cardP2El = $('<p>').attr({
-      class: "card-text",
+      class: "card-subtext",
       id: "p2El",
-      style: "line-height: 10px; color: lightgray",
+      style: "line-height: 10px",
     })
     cardP3El = $('<p>').attr({
       class: "card-text",
       id: "p3El",
-      style: "line-height: 10px; color: var(--white)",
+      style: "line-height: 10px",
+    })
+    cardP4El = $('<p>').attr({
+      class: "card-text",
+      id: "p4El",
+      style: "line-height: 10px",
     })
 
     $("#forecastWeather").append(cardEl);
@@ -209,14 +290,18 @@ $(function () {
     cardBodyEl.append(cardP1El);
     cardBodyEl.append(cardP2El);
     cardBodyEl.append(cardP3El);
+    cardBodyEl.append(cardP4El);
 
     cardH5El.text(obj.date.format("MMMM Do"));
     cardP1El.text("Temp: "+obj.main.tempf+"°F");
     cardP2El.text("Feels Like: "+obj.main.tempfeelsf+"°F");
     cardP3El.text("Wind: "+obj.wind.speed+" MPH");
+    cardP4El.text("Humidity: "+obj.main.humidity+" %");
   };
 
-  // get icons here http://openweathermap.org/img/wn/$%7Bicon%7D@2x.png
-  // or here https://openweathermap.org/weather-conditions
+  function clearPreviousCards () {
+    $("#mainCardEl").remove();
+    $(".futureCardEl").remove();
+  }
 
 });
