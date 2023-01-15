@@ -24,9 +24,16 @@ body {
   padding: 20px 0px 10px 0px;
 }
 
-/* .row {
-  outline: solid 1px red;
-} */
+#row1 {
+  margin: 10px 10px 0px 0px;
+}
+
+#col2 {
+  padding-top: 15px;
+}
+#col2 {
+  padding-bottom: 30px;
+}
 
 .column {
   text-align: left;
@@ -34,7 +41,6 @@ body {
 
 .selector {
   margin-left: 20px;
-  /* background: #353A6E; */
 }
 
 .accordion-item {
@@ -60,10 +66,6 @@ input {
   margin: 15px 5px 5px 10px;
 }
 
-/* .renderArea {
-  background-color: var(--blue);
-} */
-
 .locationBtn {
   width: 90%;
 }
@@ -74,10 +76,6 @@ input {
 
 .card-body {
   color: black;
-}
-
-#currentWeather {
-  margin: 10px 10px 30px 10px;
 }
 
 .card-text {

@@ -99,7 +99,6 @@ $(function () {
         currDTValue = currDay
         fiveDaysOfWeather.push(obj)
         tempChange(obj);  // added this in so I can loop through the temperature conversion without having to create a new loop
-        tempFeelChange(obj);
       }
     })
     createCurrentCard(fiveDaysOfWeather[0]);
@@ -111,18 +110,18 @@ $(function () {
 
   getApiWeather();
 
+  function convertTemp(kelvin) { // this converts the temp from the provided kelvin to faranheit 
+    let farenh = (kelvin - 273.15) * 9 / 5 + 32; //converts to farenheit
+    return Math.round(farenh); // rounds to the nearest whole number because I don't care about decimal places in a temperature, I want the whole number
+  };
+
   function tempChange(obj) { // this converts the temp from the provided kelvin to faranheit
-    let kelvin = obj.main.temp; //grabs the temp out of the populated array
-    let farenh = (kelvin - 273.15) * 9 / 5 + 32; //converts to farenheit
-    obj.main.tempf = Math.round(farenh); // rounds to the nearest whole number because I don't care about decimal places in a temperature, I want the whole number
+    obj.main.tempfeelsf = convertTemp(obj.main.feels_like); // rounds to the nearest whole number because I don't care about decimal places in a temperature, I want the whole number
+    obj.main.tempf = convertTemp(obj.main.temp);
+    obj.main.tempf_max = convertTemp(obj.main.temp_max);
+    obj.main.tempf_min = convertTemp(obj.main.temp_min);
   };
-
-  function tempFeelChange(obj) { // this converts the temp from the provided kelvin to faranheit
-    let kelvin = obj.main.feels_like; //grabs the temp out of the populated array
-    let farenh = (kelvin - 273.15) * 9 / 5 + 32; //converts to farenheit
-    obj.main.tempfeelsf = Math.round(farenh); // rounds to the nearest whole number because I don't care about decimal places in a temperature, I want the whole number
-  };
-
+  
   // weather info serving -----------------------------------------------------------
 
   function createCurrentCard(obj) {
@@ -133,12 +132,33 @@ $(function () {
     mainCardBodyEl = $('<div>').attr({
       class: "card-body",
     })
-    mainCardH5El = $('<h5>').attr({
+    mainCardH5El = $('<h4>').attr({
       class: "card-title",
+    })
+    mainCardH6El = $('<h5>').attr({
+      class: "card-subtitle",
     })
     mainCardImgEl = $('<img>').attr({
       class: "card-subtitle mb-2",
-      src: `http://openweathermap.org/img/wn/${obj.weather[0].icon}.png`,
+      src: `http://openweathermap.org/img/wn/${obj.weather[0].icon}@2x.png`,
+    })
+    mainCardRowEl = $('<div>').attr({
+      class: "row",
+      id: "row1",
+    })
+    mainCardTextEl = $('<div>').attr({
+      class: "row",
+      id: "row2",
+    })
+    mainCardColAEl = $('<div>').attr({
+      class: "col-4",
+    })
+    mainCardColBEl = $('<div>').attr({
+      class: "col-4",
+    })
+    mainCardCol1El = $('<div>').attr({
+      class: "col-4",
+      id: "col1",
     })
     mainCardP1El = $('<p>').attr({
       class: "card-text",
@@ -150,24 +170,74 @@ $(function () {
       id: "p2El",
       style: "line-height: 10px",
     })
+    mainCardCo12El = $('<div>').attr({
+      class: "col-4",
+      id: "col2",
+    })
+    mainCardCo13El = $('<div>').attr({
+      class: "col-4",
+      id: "col3",
+    })
     mainCardP3El = $('<p>').attr({
       class: "card-text",
       id: "p3El",
       style: "line-height: 10px",
     })
+    mainCardP4El = $('<p>').attr({
+      class: "card-text",
+      id: "p4El",
+      style: "line-height: 10px",
+    })
+    mainCardP5El = $('<p>').attr({
+      class: "card-text",
+      id: "p5El",
+      style: "line-height: 10px",
+    })
+    mainCardP6El = $('<p>').attr({
+      class: "card-text",
+      id: "p6El",
+      style: "line-height: 10px",
+    })
+    mainCardP7El = $('<p>').attr({
+      class: "card-text",
+      id: "p6El",
+      style: "line-height: 10px",
+    })
 
     $("#currentWeather").append(mainCardEl);
     mainCardEl.append(mainCardBodyEl);
-    mainCardBodyEl.append(mainCardH5El);
-    mainCardBodyEl.append(mainCardImgEl);
-    mainCardBodyEl.append(mainCardP1El);
-    mainCardBodyEl.append(mainCardP2El);
-    mainCardBodyEl.append(mainCardP3El);
+    mainCardBodyEl.append(mainCardRowEl);
+    mainCardBodyEl.append(mainCardTextEl);
 
-    mainCardH5El.text(obj.date.format("MMMM Do, YYYY"));
+    mainCardRowEl.append(mainCardColAEl);
+    mainCardColAEl.append(mainCardH5El);
+    mainCardColAEl.append(mainCardH6El);
+
+    mainCardRowEl.append(mainCardColBEl);
+    mainCardColBEl.append(mainCardImgEl);
+
+    mainCardTextEl.append(mainCardCol1El);
+    mainCardCol1El.append(mainCardP1El);
+    mainCardCol1El.append(mainCardP2El);
+
+    mainCardTextEl.append( mainCardCo12El);
+    mainCardCo12El.append(mainCardP3El);
+    mainCardCo12El.append(mainCardP4El);
+
+    mainCardTextEl.append(mainCardCo13El);
+    mainCardCo13El.append(mainCardP5El);
+    mainCardCo13El.append(mainCardP6El);
+    mainCardCo13El.append(mainCardP7El);
+
+    mainCardH5El.text(obj.date.format("dddd"));
+    mainCardH6El.text(obj.date.format("MMMM Do, YYYY"));
     mainCardP1El.text("Temp: "+obj.main.tempf+"°F");
     mainCardP2El.text("Feels Like: "+obj.main.tempfeelsf+"°F");
-    mainCardP3El.text("Wind: "+obj.wind.speed+" MPH");
+    mainCardP3El.text("Max: "+obj.main.tempf_max+"°F");
+    mainCardP4El.text("Min: "+obj.main.tempf_min+"°F");
+    mainCardP5El.text("Humidity: "+obj.main.humidity+" %");
+    mainCardP6El.text("Wind: "+obj.wind.speed+" MPH");
+    mainCardP7El.text("Gust: "+obj.wind.gust+" MPH");
   }
 
   function createFutureCard(obj) {
